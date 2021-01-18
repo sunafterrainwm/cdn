@@ -151,8 +151,30 @@ var
 jQuery.extensions = {};
 
 jQuery.InstallExtensionLog = function ( extension, location, version = null ) {
-    if ( !extension || jQuery.extensions[extension] ) {
+    function compareVersions( v1, v2 ) {
+        var i,
+            rVersionParts = /^(\d+)\.(\d+)\.(\d+)/,
+            v1p = rVersionParts.exec( v1 ) || [ ],
+            v2p = rVersionParts.exec( v2 ) || [ ];
+    
+        for ( i = 1; i <= 3; i++ ) {
+            if ( +v1p[ i ] > +v2p[ i ] ) {
+                return 1;
+            }
+            if ( +v1p[ i ] < +v2p[ i ] ) {
+                return -1;
+            }
+        }
+        return 0;
+    }
+    
+    if ( !extension ) {
         return;
+    } else if ( jQuery.extensions[extension] && compareVersions( version, jQuery.extensions[extension].version ) < 0 ) {
+        throw new Error( "jqloadextfunc: " + extension + " is installed with version " + jQuery.extensions[extension].version + ", could't load the version " + version + "less then now!" );
+    } else if ( jQuery.extensions[extension] && compareVersions( version, jQuery.extensions[extension].version ) > 0 ) {
+        jQuery.extensions[extension].version = version;
+        console.log( new Error( "jqloadextfunc: " + extension + " is installed with new version" + version ).stack.replace( /^Error\: /, '' ) );
     }
 
     jQuery.extensions[extension] = {
@@ -167,7 +189,7 @@ jQuery.InstallExtensionLog = function ( extension, location, version = null ) {
         return;
     }
 
-    console.log(new Error("jqloadextfunc: " + extension + " is installed" + (version ? ", version " + version : "")).stack.replace(/^Error\: /, ''));
+    console.log( new Error( "jqloadextfunc: " + extension + " is installed" + ( version ? ", version " + version : "" ) ).stack.replace( /^Error\: /, '' ) );
 }
 
 jQuery.fn = jQuery.prototype = {
@@ -244,14 +266,17 @@ jQuery.extend = jQuery.fn.extend = function() {
         i = 1,
         length = arguments.length,
         deep = false;
+    
     if ( typeof target === "boolean" ) {
         deep = target;
         target = arguments[ i ] || {};
         i++;
     }
+
     if ( typeof target !== "object" && !isFunction( target ) ) {
         target = {};
     }
+
     if ( i === length ) {
         target = this;
         i--;
@@ -8012,6 +8037,8 @@ jQuery.clone = function () {
 
 jQuery.migrateVersion = "3.3.2";
 
+jQuery.InstallExtensionLog('jQuery.migrate', 'https://github.com/jquery/jquery-migrate', jQuery.migrateVersion )
+
 function compareVersions( v1, v2 ) {
     var i,
         rVersionParts = /^(\d+)\.(\d+)\.(\d+)/,
@@ -8049,8 +8076,6 @@ function jQueryVersionSince( version ) {
     window.console.log( "JQMIGRATE: Migrate is installed" +
         ( jQuery.migrateMute ? "" : " with logging active" ) +
         ", version " + jQuery.migrateVersion );
-    
-    jQuery.InstallExtensionLog('jQuery.migrate', 'https://github.com/jquery/jquery-migrate', jQuery.migrateVersion )
 } )();
 
 var warnedAbout = {};
