@@ -151,7 +151,7 @@ var
 jQuery.extensions = {};
 
 jQuery.InstallExtensionLog = function ( extension, location, version = null ) {
-    if (!extension) {
+    if ( !extension || jQuery.extensions[extension] ) {
         return;
     }
 
