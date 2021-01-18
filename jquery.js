@@ -171,7 +171,7 @@ jQuery.InstallExtensionLog = function ( extension, location, version = null ) {
     if ( !extension ) {
         return;
     } else if ( jQuery.extensions[extension] && compareVersions( version, jQuery.extensions[extension].version ) < 0 ) {
-        throw new Error( "jqloadextfunc: " + extension + " is installed with version " + jQuery.extensions[extension].version + ", could't load the version " + version + "less then now!" );
+        throw new Error( "jqloadextfunc: " + extension + " is installed with version " + jQuery.extensions[extension].version + ", could't load the version " + version + " which less then now!" );
     } else if ( jQuery.extensions[extension] && compareVersions( version, jQuery.extensions[extension].version ) > 0 ) {
         jQuery.extensions[extension].version = version;
         console.log( new Error( "jqloadextfunc: " + extension + " is installed with new version" + version ).stack.replace( /^Error\: /, '' ) );
