@@ -2296,7 +2296,9 @@ var rootjQuery,
 
     init = jQuery.fn.init = function( selector, context, root ) {
         var match, elem;
-        if ( !selector ) {
+        if ( !( this instanceof jQuery.fn.init ) ) {
+            return new jQuery.fn.init( selector, context, root );
+        } else if ( !selector ) {
             return this;
         }
         root = root || rootjQuery;
