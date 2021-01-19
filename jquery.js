@@ -9505,7 +9505,7 @@ if ( window.document.compatMode === "BackCompat" ) {
     migrateWarn( "jQuery is not compatible with Quirks Mode" );
 }
 
-jQuery.migrateoldFuncs = {
+var oldFuncs = jQuery.migrateoldFuncs = {
     fn: {
 
     }
@@ -9513,8 +9513,8 @@ jQuery.migrateoldFuncs = {
 
 var findProp,
     class2type = {},
-    oldInit = jQuery.migrateoldFuncs.fn.init = jQuery.fn.init,
-    oldFind = jQuery.migrateoldFuncs.find = jQuery.find,
+    oldInit = oldFuncs.fn.init = jQuery.fn.init,
+    oldFind = oldFuncs.find = jQuery.find,
 
     rattrHashTest = /\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/,
     rattrHashGlob = /\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/g,
@@ -9654,7 +9654,7 @@ if ( jQueryVersionSince( "3.3.0" ) ) {
 
 if ( jQuery.ajax ) {
 
-var oldAjax = jQuery.migrateoldFuncs.ajax = jQuery.ajax,
+var oldAjax = oldFuncs.ajax = jQuery.ajax,
     rjsonp = /(=)\?(?=&|$)|\?\?/;
 
 jQuery.ajax = function( ) {
@@ -9687,8 +9687,8 @@ if ( !jQueryVersionSince( "4.0.0" ) ) {
 
 }
 
-var oldRemoveAttr = jQuery.migrateoldFuncs.fn.removeAttr = jQuery.fn.removeAttr,
-    oldToggleClass = jQuery.migrateoldFuncs.fn.toggleClass = jQuery.fn.toggleClass,
+var oldRemoveAttr = oldFuncs.fn.removeAttr = jQuery.fn.removeAttr,
+    oldToggleClass = oldFuncs.fn.toggleClass = jQuery.fn.toggleClass,
     rmatchNonSpace = /\S+/g;
 
 jQuery.fn.removeAttr = function( name ) {
@@ -9799,7 +9799,7 @@ function isAutoPx( prop ) {
         rautoPx.test( prop[ 0 ].toUpperCase() + prop.slice( 1 ) );
 }
 
-oldFnCss = jQuery.migrateoldFuncs.fn.css = jQuery.fn.css;
+oldFnCss = oldFuncs.fn.css = jQuery.fn.css;
 
 jQuery.fn.css = function( name, value ) {
     var camelName,
@@ -9821,7 +9821,7 @@ jQuery.fn.css = function( name, value ) {
     return oldFnCss.apply( this, arguments );
 };
 
-var oldData = jQuery.migrateoldFuncs.data = jQuery.data;
+var oldData = oldFuncs.data = jQuery.data;
 
 jQuery.data = function( elem, name, value ) {
     var curData, sameKeys, key;
@@ -9859,14 +9859,14 @@ jQuery.data = function( elem, name, value ) {
 
 if ( jQuery.fx ) {
 
-jQuery.migrateoldFuncs.Tween = {
+oldFuncs.Tween = {
     prototype: {
 
     }
 };
 
 var intervalValue, intervalMsg,
-    oldTweenRun = jQuery.migrateoldFuncs.Tween.prototype.run = jQuery.Tween.prototype.run,
+    oldTweenRun = oldFuncs.Tween.prototype.run = jQuery.Tween.prototype.run,
     linearEasing = function( pct ) {
         return pct;
     };
@@ -9883,9 +9883,9 @@ jQuery.Tween.prototype.run = function( ) {
     oldTweenRun.apply( this, arguments );
 };
 
-jQuery.migrateoldFuncs.fx = {};
+oldFuncs.fx = {};
 
-intervalValue = jQuery.migrateoldFuncs.fx.interval = jQuery.fx.interval || 13;
+intervalValue = oldFuncs.fx.interval = jQuery.fx.interval || 13;
 intervalMsg = "jQuery.fx.interval is deprecated";
 
 if ( window.requestAnimationFrame ) {
@@ -9907,11 +9907,11 @@ if ( window.requestAnimationFrame ) {
 
 }
 
-jQuery.migrateoldFuncs.event = {};
+oldFuncs.event = {};
 
-var oldLoad = jQuery.migrateoldFuncs.fn.load = jQuery.fn.load,
-    oldEventAdd = jQuery.migrateoldFuncs.event.add = jQuery.event.add,
-    originalFix = jQuery.migrateoldFuncs.event.fix = jQuery.event.fix;
+var oldLoad = oldFuncs.fn.load = jQuery.fn.load,
+    oldEventAdd = oldFuncs.event.add = jQuery.event.add,
+    originalFix = oldFuncs.event.fix = jQuery.event.fix;
 
 jQuery.event.props = [];
 jQuery.event.fixHooks = {};
@@ -9993,8 +9993,8 @@ jQuery( function() {
     jQuery( window.document ).triggerHandler( "ready" );
 } );
 
-jQuery.migrateoldFuncs.event.special = {};
-jQuery.event.special.ready = jQuery.migrateoldFuncs.event.special.ready = {
+oldFuncs.event.special = {};
+jQuery.event.special.ready = oldFuncs.event.special.ready = {
     setup: function() {
         if ( this === window.document ) {
             migrateWarn( "'ready' event is deprecated" );
@@ -10029,7 +10029,7 @@ jQuery.fn.extend( {
 } );
 
 var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
-    origHtmlPrefilter = jQuery.migrateoldFuncs.htmlPrefilter = jQuery.htmlPrefilter,
+    origHtmlPrefilter = oldFuncs.htmlPrefilter = jQuery.htmlPrefilter,
     makeMarkup = function( html ) {
         var doc = window.document.implementation.createHTMLDocument( "" );
         doc.body.innerHTML = html;
@@ -10054,7 +10054,7 @@ jQuery.htmlPrefilter = function( html ) {
     return origHtmlPrefilter( html );
 };
 
-var oldOffset = jQuery.migrateoldFuncs.fn.offset = jQuery.fn.offset;
+var oldOffset = oldFuncs.fn.offset = jQuery.fn.offset;
 
 jQuery.fn.offset = function() {
     var elem = this[ 0 ];
@@ -10069,7 +10069,7 @@ jQuery.fn.offset = function() {
 
 if ( jQuery.ajax ) {
 
-var oldParam = jQuery.migrateoldFuncs.param = jQuery.param;
+var oldParam = oldFuncs.param = jQuery.param;
 
 jQuery.param = function( data, traditional ) {
     var ajaxTraditional = jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
@@ -10086,7 +10086,7 @@ jQuery.param = function( data, traditional ) {
 }
 
 if ( jQuery.fn.andSelf ) {
-    jQuery.migrateoldFuncs.fn.andSelf = jQuery.fn.andSelf;
+    oldFuncs.fn.andSelf = jQuery.fn.andSelf;
 }
 
 var oldSelf = jQuery.fn.andSelf || jQuery.fn.addBack;
@@ -10098,7 +10098,7 @@ jQuery.fn.andSelf = function() {
 
 if ( jQuery.Deferred ) {
 
-var oldDeferred = jQuery.migrateoldFuncs.Deferred = jQuery.Deferred,
+var oldDeferred = oldFuncs.Deferred = jQuery.Deferred,
     tuples = [
 
         [ "resolve", "done", jQuery.Callbacks( "once memory" ),
