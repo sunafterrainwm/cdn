@@ -394,6 +394,7 @@ jQuery.extend( {
     inArray: function( elem, arr, i ) {
         return arr == null ? -1 : indexOf.call( arr, elem, i );
     },
+
     merge: function( first, second ) {
         var len = +second.length,
             j = 0,
@@ -471,6 +472,7 @@ function isArrayLike( obj ) {
     return type === "array" || length === 0 ||
         typeof length === "number" && length > 0 && ( length - 1 ) in obj;
 }
+
 var Sizzle = ( function( window ) {
 var i,
     support,
@@ -583,6 +585,7 @@ var i,
                 String.fromCharCode( high + 0x10000 ) :
                 String.fromCharCode( high >> 10 | 0xD800, high & 0x3FF | 0xDC00 );
     },
+
     rcssescape = /([\0-\x1f\x7f]|^-?\d)|^-$|[^\0-\x1f\x7f-\uFFFF\w-]/g,
     fcssescape = function( ch, asCodePoint ) {
         if ( asCodePoint ) {
@@ -594,6 +597,7 @@ var i,
         }
         return "\\" + ch;
     },
+
     unloadHandler = function() {
         setDocument();
     },
@@ -604,6 +608,7 @@ var i,
         },
         { dir: "parentNode", next: "legend" }
     );
+
 try {
     push.apply(
         ( arr = slice.call( preferredDoc.childNodes ) ),
@@ -8020,7 +8025,7 @@ var oldClone = typeof jQuery.clone == 'function' ? jQuery.clone : function ( ele
 };
     
 jQuery.clone = function () {
-    var ret, args = jQuery.makeArray( arguments );
+    var ret, args = slice.call( arguments );
     if ( args[ 0 ] instanceof jQuery.fn.init ) {
         ret = [];
         args[ 0 ].each( function ( i, value ) {
@@ -8065,9 +8070,7 @@ jQuery.extend( jQuery.fn, {
         jQuery.data( this[ 0 ], "validator", validator );
 
         if ( validator.settings.onsubmit ) {
-
             this.on( "click.validate", ":submit", function( event ) {
-                // submits later.
                 validator.submitButton = event.currentTarget;
                 if ( jQuery( this ).hasClass( "cancel" ) ) {
                     validator.cancelSubmit = true;
@@ -8076,6 +8079,7 @@ jQuery.extend( jQuery.fn, {
                     validator.cancelSubmit = true;
                 }
             } );
+
             this.on( "submit.validate", function( event ) {
                 if ( validator.settings.debug ) {
                     event.preventDefault();
@@ -8083,8 +8087,6 @@ jQuery.extend( jQuery.fn, {
 
                 function handle() {
                     var hidden, result;
-                    // The hidden input is inserted in two cases:
-                    //   - There was a pending request due to `remote` method and `stopRequest()`
                     if ( validator.submitButton && ( validator.settings.submitHandler || validator.formSubmitted ) ) {
                         hidden = jQuery( "<input type='hidden'/>" )
                             .attr( "name", validator.submitButton.name )
@@ -8213,7 +8215,7 @@ var trim = function( str ) {
     return str.replace( /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "" );
 };
 
-jQuery.extend( jQuery.expr.pseudos, {
+jQuery.extend( jQuery.expr.pseudos || jQuery.expr[':'], {
     blank: function( a ) {
         return !trim( "" + jQuery( a ).val() );
     },
@@ -8258,7 +8260,6 @@ jQuery.validator.format = function( source, params ) {
 };
 
 jQuery.extend( jQuery.validator, {
-
     defaults: {
         messages: {},
         groups: {},
@@ -8322,6 +8323,7 @@ jQuery.extend( jQuery.validator, {
             }
         }
     },
+
     setDefaults: function( settings ) {
         jQuery.extend( jQuery.validator.defaults, settings );
     },
@@ -8382,7 +8384,7 @@ jQuery.extend( jQuery.validator, {
                     this.form = jQuery( this ).closest( "form" )[ 0 ];
                     this.name = jQuery( this ).attr( "name" );
                 }
-                // when setting the `form` attribute of an input to the id of another form.
+
                 if ( currentForm !== this.form ) {
                     return;
                 }
@@ -8437,7 +8439,7 @@ jQuery.extend( jQuery.validator, {
             } else {
                 this.prepareElement( checkElement );
                 this.currentElements = jQuery( checkElement );
-                // containing a value
+
                 group = this.groups[ checkElement.name ];
                 if ( group ) {
                     jQuery.each( this.groups, function( name, testgroup ) {
@@ -8578,7 +8580,7 @@ jQuery.extend( jQuery.validator, {
             .not( ":submit, :reset, :image, :disabled" )
             .not( this.settings.ignore )
             .filter( function() {
-                var name = this.name || jQuery( this ).attr( "name" ); // For contenteditable
+                var name = this.name || jQuery( this ).attr( "name" );
                 var isContentEditable = typeof jQuery( this ).attr( "contenteditable" ) !== "undefined" && jQuery( this ).attr( "contenteditable" ) !== "false";
 
                 if ( !name && validator.settings.debug && window.console ) {
@@ -8654,7 +8656,7 @@ jQuery.extend( jQuery.validator, {
                 if ( val.substr( 0, 12 ) === "C:\\fakepath\\" ) {
                     return val.substr( 12 );
                 }
-                // Unix-based path
+
                 idx = val.lastIndexOf( "/" );
                 if ( idx >= 0 ) {
                     return val.substr( idx + 1 );
@@ -8687,7 +8689,7 @@ jQuery.extend( jQuery.validator, {
             } else if (    typeof this.settings.normalizer === "function" ) {
                 normalizer = this.settings.normalizer;
             }
-            // of using the real one.
+
             if ( normalizer ) {
                 val = normalizer.call( element, val );
                 delete rules.normalizer;
@@ -8846,7 +8848,6 @@ jQuery.extend( jQuery.validator, {
                     .html( message || "" );
                 place = error;
                 if ( this.settings.wrapper ) {
-                    // actually showing the wrapped element is handled elsewhere
                     place = error.hide().show().wrap( "<" + this.settings.wrapper + "/>" ).parent();
                 }
                 if ( this.labelContainer.length ) {
@@ -8858,7 +8859,6 @@ jQuery.extend( jQuery.validator, {
                 }
                 if ( error.is( "label" ) ) {
                     error.attr( "for", elementID );
-                    // to explicitly apply aria-describedby
                 } else if ( error.parents( "label[for='" + this.escapeCssMeta( elementID ) + "']" ).length === 0 ) {
                     errorID = error.attr( "id" );
                     if ( !describedBy ) {
@@ -8977,8 +8977,6 @@ jQuery.extend( jQuery.validator, {
             jQuery( element ).removeClass( this.settings.pendingClass );
             if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
                 jQuery( this.currentForm ).submit();
-                // missing submit button. The hidden input is added by `handle()`
-                // for scripted submits triggered by this method
                 if ( this.submitButton ) {
                     jQuery( "input:hidden[name='" + this.submitButton.name + "']", this.currentForm ).remove();
                 }
@@ -8999,6 +8997,7 @@ jQuery.extend( jQuery.validator, {
                 message: this.defaultMessage( element, { method: method } )
             } );
         },
+
         destroy: function() {
             this.resetForm();
 
@@ -9513,7 +9512,7 @@ var findProp,
     rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 jQuery.fn.init = function( arg1 ) {
-    var args = Array.prototype.slice.call( arguments );
+    var args = slice.call( arguments );
 
     if ( typeof arg1 === "string" && arg1 === "#" ) {
         migrateWarn( "jQuery( '#' ) is not a valid selector" );
@@ -9525,7 +9524,7 @@ jQuery.fn.init = function( arg1 ) {
 jQuery.fn.init.prototype = jQuery.fn;
 
 jQuery.find = function( selector ) {
-    var args = Array.prototype.slice.call( arguments );
+    var args = slice.call( arguments );
 
     if ( typeof selector === "string" && rattrHashTest.test( selector ) ) {
 
@@ -9935,7 +9934,7 @@ jQuery.event.add = function( elem, types ) {
 jQuery.each( [ "load", "unload", "error" ], function( _, name ) {
 
     jQuery.fn[ name ] = function() {
-        var args = Array.prototype.slice.call( arguments, 0 );
+        var args = slice.call( arguments, 0 );
 
         if ( name === "load" && typeof args[ 0 ] === "string" ) {
             return oldLoad.apply( this, args );
