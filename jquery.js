@@ -9883,9 +9883,12 @@ jQuery.Tween.prototype.run = function( ) {
     oldTweenRun.apply( this, arguments );
 };
 
-oldFuncs.fx = {};
+if ( jQuery.fx.interval ) {
+    oldFuncs.fx = {};
+    oldFuncs.fx.interval = jQuery.fx.interval;
+}
 
-intervalValue = oldFuncs.fx.interval = jQuery.fx.interval || 13;
+intervalValue = jQuery.fx.interval || 13;
 intervalMsg = "jQuery.fx.interval is deprecated";
 
 if ( window.requestAnimationFrame ) {
