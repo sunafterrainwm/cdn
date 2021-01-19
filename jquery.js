@@ -198,7 +198,7 @@ jQuery.InstallExtensionLog = function ( extension, location, version = null ) {
     }
 
     console.log( new Error( "jqloadextfunc: " + extension + " is installed" + ( version ? ", version " + version : "" ) ).stack.replace( /^Error\: /, '' ) );
-}
+};
 
 jQuery.fn = jQuery.prototype = {
     jquery: version,
