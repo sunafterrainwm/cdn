@@ -7928,7 +7928,11 @@ jQuery.isNumeric = function( obj ) {
 jQuery.trim = function( text ) {
     return text == null ?
         "" :
-        ( text + "" ).replace( rtrim, "" );
+        (
+            String.prototype.trim ?
+            ( text + "" ).trim() :
+            ( text + "" ).replace( rtrim, "" )
+        );
 };
 
 
@@ -9512,7 +9516,7 @@ var findProp,
     rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 jQuery.fn.init = function( arg1 ) {
-    var args = slice.call( arguments );
+    var args = Array.prototype.slice.call( arguments );
 
     if ( typeof arg1 === "string" && arg1 === "#" ) {
         migrateWarn( "jQuery( '#' ) is not a valid selector" );
@@ -9524,7 +9528,7 @@ jQuery.fn.init = function( arg1 ) {
 jQuery.fn.init.prototype = jQuery.fn;
 
 jQuery.find = function( selector ) {
-    var args = slice.call( arguments );
+    var args = Array.prototype.slice.call( arguments );
 
     if ( typeof selector === "string" && rattrHashTest.test( selector ) ) {
 
@@ -9576,11 +9580,15 @@ migrateWarnProp( jQuery.expr, "filters", jQuery.expr.pseudos,
 migrateWarnProp( jQuery.expr, ":", jQuery.expr.pseudos,
     "jQuery.expr[':'] is deprecated; use jQuery.expr.pseudos" );
 
-if ( jQueryVersionSince( "3.1.1" ) ) {
+if ( jQueryVersionSince( "3.1.1" ) && String.prototype.trim ) {
     migrateWarnFunc( jQuery, "trim", function( text ) {
         return text == null ?
             "" :
-            ( text + "" ).replace( rtrim, "" );
+            (
+                String.prototype.trim ?
+                ( text + "" ).trim() :
+                ( text + "" ).replace( rtrim, "" )
+            );
     },
     "jQuery.trim is deprecated; use String.prototype.trim" );
 }
